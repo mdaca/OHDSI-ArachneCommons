@@ -3,7 +3,7 @@ package com.odysseusinc.arachne.commons.api.v1.dto.util;
 import com.odysseusinc.arachne.commons.api.v1.dto.CommonModelType;
 import org.springframework.messaging.handler.annotation.Payload;
 
-import javax.validation.Constraint;
+import jakarta.validation.Constraint;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -27,7 +27,7 @@ public @interface NotNullIfAnotherFieldHasValue {
 
     String dependentFieldName();
 
-    String message() default "{javax.validation.constraints.NotNull.message}";
+    String message() default "{jakarta.validation.constraints.NotNull.message}";
 
     Class<?>[] groups() default {};
 

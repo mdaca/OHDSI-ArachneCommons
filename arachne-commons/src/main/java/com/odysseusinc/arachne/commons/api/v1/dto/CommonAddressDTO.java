@@ -2,8 +2,8 @@ package com.odysseusinc.arachne.commons.api.v1.dto;
 
 import com.odysseusinc.arachne.commons.api.v1.dto.util.AnyFieldNotBlank;
 import com.odysseusinc.arachne.commons.api.v1.dto.util.NotNullIfAnotherFieldHasValue;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 

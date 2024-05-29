@@ -23,7 +23,7 @@
 package com.odysseusinc.arachne.commons.api.v1.dto;
 
 import java.util.Map;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 

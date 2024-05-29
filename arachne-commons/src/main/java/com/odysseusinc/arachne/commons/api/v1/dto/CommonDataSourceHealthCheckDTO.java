@@ -22,7 +22,7 @@
 
 package com.odysseusinc.arachne.commons.api.v1.dto;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 public class CommonDataSourceHealthCheckDTO {
     @NotNull

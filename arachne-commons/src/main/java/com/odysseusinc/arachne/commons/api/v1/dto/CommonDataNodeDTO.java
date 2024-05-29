@@ -23,7 +23,7 @@
 package com.odysseusinc.arachne.commons.api.v1.dto;
 
 import java.io.Serializable;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 public class CommonDataNodeDTO extends CommonDataNodeCreationResponseDTO implements Serializable{
 

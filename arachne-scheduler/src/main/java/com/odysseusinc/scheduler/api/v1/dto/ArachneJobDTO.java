@@ -3,7 +3,7 @@ package com.odysseusinc.scheduler.api.v1.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.odysseusinc.scheduler.model.JobExecutingType;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.Date;

@@ -23,7 +23,7 @@
 package com.odysseusinc.arachne.commons.api.v1.dto;
 
 import java.util.Date;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * @author aryabokon

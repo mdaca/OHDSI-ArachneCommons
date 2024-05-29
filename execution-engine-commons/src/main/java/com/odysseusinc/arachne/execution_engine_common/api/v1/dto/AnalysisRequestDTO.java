@@ -22,7 +22,7 @@
 
 package com.odysseusinc.arachne.execution_engine_common.api.v1.dto;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 public class AnalysisRequestDTO extends AnalysisSyncRequestDTO {
 

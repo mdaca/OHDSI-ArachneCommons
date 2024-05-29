@@ -3,8 +3,8 @@ package com.odysseusinc.arachne.commons.api.v1.dto.util;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Objects;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import org.apache.commons.lang3.StringUtils;
 
 public class AnyFieldNotBlankValidator implements ConstraintValidator<AnyFieldNotBlank, Object> {

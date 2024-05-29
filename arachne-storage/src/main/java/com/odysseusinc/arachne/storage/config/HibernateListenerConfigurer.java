@@ -1,22 +1,29 @@
 package com.odysseusinc.arachne.storage.config;
 
 import com.odysseusinc.arachne.storage.service.JcrContentIntegrityService;
-import javax.annotation.PostConstruct;
-import javax.persistence.EntityManagerFactory;
+import jakarta.annotation.PostConstruct;
+import jakarta.persistence.EntityManagerFactory;
+
+import javax.sql.DataSource;
+
+import org.hibernate.SessionFactory;
 import org.hibernate.event.service.spi.EventListenerRegistry;
 import org.hibernate.event.spi.DeleteEventListener;
 import org.hibernate.event.spi.EventType;
 import org.hibernate.internal.SessionFactoryImpl;
-import org.hibernate.jpa.HibernateEntityManagerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
 @Configuration
 public class HibernateListenerConfigurer {
 
     @Autowired
     private EntityManagerFactory entityManagerFactory;
-
+    
     @Autowired
     private JcrContentIntegrityService jcrContentIntegrityService;
 
@@ -30,9 +37,7 @@ public class HibernateListenerConfigurer {
     }
 
     private EventListenerRegistry getEventRegistry() {
-
-        HibernateEntityManagerFactory hibernateEntityManagerFactory = (HibernateEntityManagerFactory) this.entityManagerFactory;
-        SessionFactoryImpl sessionFactoryImpl = (SessionFactoryImpl) hibernateEntityManagerFactory.getSessionFactory();
+        SessionFactoryImpl sessionFactoryImpl = entityManagerFactory.unwrap(SessionFactoryImpl.class);
         return sessionFactoryImpl.getServiceRegistry().getService(EventListenerRegistry.class);
     }
 }
