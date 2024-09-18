@@ -23,7 +23,16 @@ jobs:
           CODEARTIFACT_DOMAIN_REPO: '${{ secrets.CODEARTIFACT_DOMAIN}}/${{ secrets.CODEARTIFACT_REPO}}'
           CODEARTIFACT_URL: 'https://${{ secrets.CODEARTIFACT_DOMAIN }}-${{  secrets.AWS_ACCOUNT_ID}}.d.codeartifact.${{ secrets.AWS_REGION}}.amazonaws.com/${{ secrets.CODEARTIFACT_DOMAIN }}/${{ secrets.CODEARTIFACT_REPO }}/' # Replace with actual URL
         run: echo "Environment variables set."
-         echo $CODEARTIFACT_AUTH_TOKEN
+          echo "Setting up AWS CodeArtifact authentication token"
+          export CODEARTIFACT_AUTH_TOKEN=$(aws codeartifact get-authorization-token \
+            --domain ${{ secrets.CODEARTIFACT_DOMAIN }} \
+            --domain-owner $AWS_ACCOUNT_ID \
+            --region $AWS_REGION \
+            --query authorizationToken \
+            --output text)
+          
+          echo "Environment variables set."
+          echo "CodeArtifact Auth Token: $CODEARTIFACT_AUTH_TOKEN"
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
