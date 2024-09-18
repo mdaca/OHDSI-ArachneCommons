@@ -49,4 +49,4 @@ jobs:
             --region $AWS_REGION \
             --query authorizationToken \
             --output text) 
-          mvn deploy -s .m2/settings.xml -X
+          mvn deploy -s .m2/settings.xml -DaltDeploymentRepository=codeartifact::default::https://mdaca-201959883603.d.codeartifact.us-east-2.amazonaws.com/maven/OHDSI/ -X
