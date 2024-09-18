@@ -22,7 +22,6 @@ jobs:
           CODEARTIFACT_URL: 'https://${{ secrets.CODEARTIFACT_DOMAIN }}-${{  secrets.AWS_ACCOUNT_ID}}.d.codeartifact.${{ secrets.AWS_REGION}}.amazonaws.com/${{ secrets.CODEARTIFACT_DOMAIN }}/${{ secrets.CODEARTIFACT_REPO }}/' # Replace with actual URL
         run: echo "Environment variables set."
          echo "CODEARTIFACT_AUTH_TOKEN=$(aws codeartifact get-authorization-token --domain ${{ secrets.CODEARTIFACT_DOMAIN }} --domain-owner ${{ secrets.AWS_ACCOUNT_ID }} --region ${{ secrets.AWS_REGION }} --query authorizationToken --output text)" >> $GITHUB_ENV
-		 
       - name: Create .m2 directory
         run: mkdir -p ~/.m2
 
