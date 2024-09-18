@@ -3,7 +3,7 @@ name: Build with CodeArtifact
 on:
   push:
     branches:
-      - test
+      - aws-code-artifact-intergration
 
 jobs:
   build:
