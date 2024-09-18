@@ -1,6 +1,9 @@
 name: Build with CodeArtifact
 
-on: [push]
+on:
+  push:
+    branches:
+      - test
 
 jobs:
   build:
@@ -22,35 +25,6 @@ jobs:
           CODEARTIFACT_URL: 'https://${{ secrets.CODEARTIFACT_DOMAIN }}-${{  secrets.AWS_ACCOUNT_ID}}.d.codeartifact.${{ secrets.AWS_REGION}}.amazonaws.com/${{ secrets.CODEARTIFACT_DOMAIN }}/${{ secrets.CODEARTIFACT_REPO }}/' # Replace with actual URL
         run: echo "Environment variables set."
          echo "CODEARTIFACT_AUTH_TOKEN=$(aws codeartifact get-authorization-token --domain ${{ secrets.CODEARTIFACT_DOMAIN }} --domain-owner ${{ secrets.AWS_ACCOUNT_ID }} --region ${{ secrets.AWS_REGION }} --query authorizationToken --output text)" >> $GITHUB_ENV
-      - name: Create .m2 directory
-        run: mkdir -p ~/.m2
-
-      - name: Set up Maven settings.xml
-        run: |
-          echo "<settings>
-                  <servers>
-                    <server>
-                      <id>codeartifact</id>
-                      <username>aws</username>
-                      <password>${env.CODEARTIFACT_AUTH_TOKEN}</password>
-                    </server>
-                  </servers>
-                  <profiles>
-                    <profile>
-                      <id>codeartifact</id>
-                      <activation>
-                        <activeByDefault>true</activeByDefault>
-                      </activation>
-                      <repositories>
-                        <repository>
-                          <id>${env.CODEARTIFACT_DOMAIN_REPO}</id>
-                          <url>${env.CODEARTIFACT_URL}</url>
-                        </repository>
-                      </repositories>
-                    </profile>
-                  </profiles>
-                 </settings>" > ~/.m2/settings.xml
-
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
@@ -58,4 +32,4 @@ jobs:
           distribution: 'temurin'
 
       - name: Build with Maven
-        run: mvn clean install
+        run: mvn clean deploy -s .m2/settings.xml
