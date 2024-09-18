@@ -36,17 +36,17 @@
         <snakeyaml.version>2.2</snakeyaml.version>
     </properties>
 
-    <distributionManagement>
-        <snapshotRepository>
-            <id>community-libs-snapshot-local</id>
-            <name>community-libs-snapshot-local</name>
-            <url>https://nexus.odysseusinc.com/repository/community-libs-snapshot-local</url>
-        </snapshotRepository>
-        <repository>
-            <id>community-libs-release-local</id>
-            <name>community-libs-release-local</name>
-            <url>https://nexus.odysseusinc.com/repository/community-libs-release-local</url>
-        </repository>
+    <<distributionManagement>
+    <repository>
+        <id>codeartifact</id>
+        <name>AWS CodeArtifact Repository</name>
+        <url>${env.MAVEN_REPO_URL}</url>
+    </repository>
+    <snapshotRepository>
+        <id>codeartifact-snapshot</id>
+        <name>AWS CodeArtifact Snapshot Repository</name>
+        <url>${env.MAVEN_REPO_URL}</url>
+    </snapshotRepository>
     </distributionManagement>
 
     <dependencyManagement>
