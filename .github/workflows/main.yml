@@ -43,13 +43,10 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
         run: |
           echo "Running Maven Build"
-          cat /home/runner/.m2/settings.xml
-          cat .m2/settings.xml
-          cat ~/.m2/settings.xml
           export CODEARTIFACT_AUTH_TOKEN=$(aws codeartifact get-authorization-token \
             --domain ${{ secrets.CODEARTIFACT_DOMAIN }} \
             --domain-owner $AWS_ACCOUNT_ID \
             --region $AWS_REGION \
             --query authorizationToken \
             --output text) 
-          mvn clean install -s ~/.m2/settings.xml -X
+          mvn clean install -s .m2/settings.xml -X
