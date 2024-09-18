@@ -31,4 +31,4 @@ jobs:
           distribution: 'temurin'
 
       - name: Build with Maven
-        run: mvn clean deploy -s .m2/settings.xml
+        run: mvn clean build -s .m2/settings.xml -X
