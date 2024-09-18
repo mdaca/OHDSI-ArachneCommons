@@ -49,4 +49,4 @@ jobs:
             --region $AWS_REGION \
             --query authorizationToken \
             --output text) 
-          mvn clean install -s .m2/settings.xml -X
+          mvn deploy -s .m2/settings.xml -X
