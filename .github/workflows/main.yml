@@ -27,8 +27,8 @@ jobs:
             --region $AWS_REGION \
             --query authorizationToken \
             --output text)
-          echo "Environment variables set."
-          echo "CodeArtifact Auth Token: $CODEARTIFACT_AUTH_TOKEN"
+      
+
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
@@ -43,12 +43,4 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
         run: |
           echo "Running Maven Build"
-          export CODEARTIFACT_AUTH_TOKEN=$(aws codeartifact get-authorization-token \
-            --domain ${{ secrets.CODEARTIFACT_DOMAIN }} \
-            --domain-owner $AWS_ACCOUNT_ID \
-            --region $AWS_REGION \
-            --query authorizationToken \
-            --output text)
-          echo "Environment variables set."
-          echo "CodeArtifact Auth Token: $CODEARTIFACT_AUTH_TOKEN"
           mvn clean install -s ~/.m2/settings.xml -X
