@@ -36,4 +36,19 @@ jobs:
           distribution: 'temurin'
 
       - name: Build with Maven
-        run: mvn clean install -s .m2/settings.xml -X
+         env:
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+        run: 
+          echo "Setting up AWS CodeArtifact authentication token"
+          export CODEARTIFACT_AUTH_TOKEN=$(aws codeartifact get-authorization-token \
+            --domain ${{ secrets.CODEARTIFACT_DOMAIN }} \
+            --domain-owner $AWS_ACCOUNT_ID \
+            --region $AWS_REGION \
+            --query authorizationToken \
+            --output text)
+           echo "Environment variables set."
+          echo "CodeArtifact Auth Token: $CODEARTIFACT_AUTH_TOKEN"
+          mvn clean install -s .m2/settings.xml -X
