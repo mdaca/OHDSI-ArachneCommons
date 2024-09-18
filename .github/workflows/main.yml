@@ -44,6 +44,7 @@ jobs:
         run: |
           echo "Running Maven Build"
           cat /home/runner/.m2/settings.xml
+          cat .m2/settings.xml
           cat ~/.m2/settings.xml
           export CODEARTIFACT_AUTH_TOKEN=$(aws codeartifact get-authorization-token \
             --domain ${{ secrets.CODEARTIFACT_DOMAIN }} \
