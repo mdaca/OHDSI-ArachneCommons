@@ -24,6 +24,7 @@ jobs:
           CODEARTIFACT_URL: 'https://${{ secrets.CODEARTIFACT_DOMAIN }}-${{  secrets.AWS_ACCOUNT_ID}}.d.codeartifact.${{ secrets.AWS_REGION}}.amazonaws.com/${{ secrets.CODEARTIFACT_DOMAIN }}/${{ secrets.CODEARTIFACT_REPO }}/' # Replace with actual URL
         run: echo "Environment variables set."
          echo $CODEARTIFACT_AUTH_TOKEN
+      - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: '17'
