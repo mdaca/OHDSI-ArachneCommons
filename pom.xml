@@ -40,12 +40,10 @@
     <repository>
         <id>codeartifact</id>
         <name>AWS CodeArtifact Repository</name>
-        <url>${env.MAVEN_REPO_URL}</url>
     </repository>
     <snapshotRepository>
         <id>codeartifact-snapshot</id>
         <name>AWS CodeArtifact Snapshot Repository</name>
-        <url>${env.MAVEN_REPO_URL}</url>
     </snapshotRepository>
     </distributionManagement>
 
