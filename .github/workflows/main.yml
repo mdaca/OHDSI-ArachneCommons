@@ -50,26 +50,26 @@ jobs:
             --query authorizationToken \
             --output text) 
           mvn clean install
-           package_list=$(aws codeartifact list-packages \
-    --domain mdaca \
-    --repository OHDSI \
-    --format maven \
-    --query "packages[].{namespace:namespace,package:package}" \
-    --output text)
+          package_list=$(aws codeartifact list-packages \
+          --domain mdaca \
+          --repository OHDSI \
+          --format maven \
+          --query "packages[].{namespace:namespace,package:package}" \
+          --output text)
 
-  # Iterate through each package in the list
-  echo "$package_list" | while read -r namespace package; do
-    # Only proceed if both namespace and package have values
-    if [[ -n "$namespace" && -n "$package" ]]; then
-      echo "Deleting package $package in namespace $namespace"
-      aws codeartifact delete-package \
-        --domain mdaca \
-        --repository OHDSI \
-        --format maven \
-        --namespace "$namespace" \
-        --package "$package"
-    else
-      echo "Skipping invalid entry: namespace=$namespace, package=$package"
-    fi
-  done
+          # Iterate through each package in the list
+          echo "$package_list" | while read -r namespace package; do
+          # Only proceed if both namespace and package have values
+          if [[ -n "$namespace" && -n "$package" ]]; then
+            echo "Deleting package $package in namespace $namespace"
+            aws codeartifact delete-package \
+            --domain mdaca \
+            --repository OHDSI \
+            --format maven \
+            --namespace "$namespace" \
+            --package "$package"
+            else
+            echo "Skipping invalid entry: namespace=$namespace, package=$package"
+            fi
+            done
           mvn clean deploy -s .m2/settings.xml -DaltDeploymentRepository=codeartifact::default::https://mdaca-201959883603.d.codeartifact.us-east-2.amazonaws.com/maven/OHDSI/
