@@ -50,15 +50,19 @@ jobs:
             --query authorizationToken \
             --output text) 
           mvn clean install
-          for package in $(aws codeartifact list-packages \
+          for package_info in $(aws codeartifact list-packages \
               --domain mdaca \
               --repository OHDSI \
-              --query "packages[].package" \
+              --format maven \
+              --query "packages[].{namespace:namespace,package:package}" \
               --output text); do
+              namespace=$(echo $package_info | awk '{print $1}')
+              package=$(echo $package_info | awk '{print $2}')
               aws codeartifact delete-package \
               --domain mdaca \
               --repository OHDSI \
               --format maven \
+              --namespace "$namespace" \
               --package "$package"
           done
           mvn clean deploy -s .m2/settings.xml -DaltDeploymentRepository=codeartifact::default::https://mdaca-201959883603.d.codeartifact.us-east-2.amazonaws.com/maven/OHDSI/
