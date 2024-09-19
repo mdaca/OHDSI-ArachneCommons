@@ -49,4 +49,16 @@ jobs:
             --region $AWS_REGION \
             --query authorizationToken \
             --output text) 
-          mvn deploy -s .m2/settings.xml -DaltDeploymentRepository=codeartifact::default::https://mdaca-201959883603.d.codeartifact.us-east-2.amazonaws.com/maven/OHDSI/
+          mvn clean install
+          for package in $(aws codeartifact list-packages \
+              --domain mdaca \
+              --repository OHDSI \
+              --query "packages[].package" \
+              --output text); do
+              aws codeartifact delete-package \
+              --domain mdaca \
+              --repository OHDSI \
+              --format maven \
+              --package "$package"
+          done
+          mvn clean deploy -s .m2/settings.xml -DaltDeploymentRepository=codeartifact::default::https://mdaca-201959883603.d.codeartifact.us-east-2.amazonaws.com/maven/OHDSI/
