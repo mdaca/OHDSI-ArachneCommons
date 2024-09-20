@@ -31,8 +31,8 @@
         <spring.boot.version>3.2.5</spring.boot.version>
         <spring.cloud.version>2023.0.1</spring.cloud.version>
         <spring.jasypt.version>3.0.3</spring.jasypt.version>
-        <spring.version>6.1.13</spring.version>   <!-- spring.version>6.1.6</spring.version -->
-        <springfox.swagger2.version>2.10.0</springfox.swagger2.version>   <!-- springfox.swagger2.version>2.9.2</springfox.swagger2.version -->
+        <spring.version>6.1.13</spring.version>
+        <springfox.swagger2.version>2.10.0</springfox.swagger2.version>
         <snakeyaml.version>2.2</snakeyaml.version>
     </properties>
 
