@@ -11,4 +11,5 @@ mvn clean install
 
 ### To build, install, and deploy the artifact to the remote AWS CodeArtifact Maven repository:
 
+```shell
 mvn clean deploy -s .m2/settings.xml -DaltDeploymentRepository=codeartifact::default::https://mdaca-201959883603.d.codeartifact.us-east-2.amazonaws.com/maven/OHDSI/
