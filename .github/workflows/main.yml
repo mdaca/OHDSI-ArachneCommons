@@ -73,3 +73,9 @@ jobs:
             fi
             done
           mvn clean deploy -s .m2/settings.xml -DaltDeploymentRepository=codeartifact::default::https://mdaca-201959883603.d.codeartifact.us-east-2.amazonaws.com/maven/OHDSI/
+      - name: Scan a specific path with Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          path: '/home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons'  # Replace with the actual path you want to scan
+          severity: 'CRITICAL,HIGH'
