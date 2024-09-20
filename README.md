@@ -10,5 +10,5 @@ mvn clean install
 ```
 ### To build and install the artifact to your remote Maven repository:
 ```sh
-mvn clean install
+mvn clean deploy -s .m2/settings.xml -DaltDeploymentRepository=codeartifact::default::https://mdaca-201959883603.d.codeartifact.us-east-2.amazonaws.com/maven/OHDSI/
 ```
