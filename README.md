@@ -8,3 +8,4 @@ The `ArachneCommons` module contains common code re-used between all Arachne com
 ```sh
 mvn clean install
 ```
+### To build and install the artifact to your remote Maven repository:
