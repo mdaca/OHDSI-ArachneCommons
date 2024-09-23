@@ -28,7 +28,6 @@ jobs:
             --query authorizationToken \
             --output text)
       
-
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
