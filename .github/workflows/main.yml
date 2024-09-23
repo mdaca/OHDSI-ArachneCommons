@@ -106,19 +106,19 @@ jobs:
           done
       
       - name: Scan a specific path with Trivy
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'fs'  # Filesystem scan
-          path: '/home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target'
-          format: 'json'  # Output in JSON format
-          output: '/home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/trivy-results.json'  # Save results to trivy-results.json file
-
-      - name: Covert Trivy to CSV 
+      - name: Install Trivy
         run: |
-          jq -r '.Results[] | select(.Vulnerabilities != null) | .Vulnerabilities[] | [.SeveritySource, .VulnerabilityID, .PkgName, .PkgPath, .InstalledVersion, .FixedVersion, .Status, .Severity] | @csv' /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/trivy-results.json > OHDSI-ArachneCommons.csv
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin
+          
+      - name: Scan FS with Trivy
+        run: |
+          trivy fs --severity HIGH,CRITICAL /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
+          trivy fs --format json /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target > OHDSI-Arachne.json
+          jq -r '.Results[] | select(.Vulnerabilities != null) | .Vulnerabilities[] | [.SeveritySource, .VulnerabilityID, .PkgName, .PkgPath, .InstalledVersion, .FixedVersion, .Status, .Severity] | @csv' OHDSI-Arachne.json > OHDSI-Arachne-Trivy.csv
+
       - name: Upload Reports
         uses: actions/upload-artifact@v4
         with:
           name: trivy-reports
           path: |
-            OHDSI-ArachneCommons.csv
+            OHDSI-Arachne-Trivy.csv
