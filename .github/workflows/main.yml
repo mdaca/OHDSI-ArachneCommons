@@ -83,7 +83,9 @@ jobs:
 
                 # Explode the jar file (extract contents)
                 unzip -o "$jarfile" -d "$exploded_dir"
-          
+
+                echo "Exploded $jarfile into $exploded_dir"
+          done
       - name: Scan a specific path with Trivy
         uses: aquasecurity/trivy-action@master
         with:
