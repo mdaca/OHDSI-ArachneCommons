@@ -73,8 +73,9 @@ jobs:
             echo "Skipping invalid entry: namespace=$namespace, package=$package"
             fi
             done
-          mvn clean deploy -s .m2/settings.xml -DaltDeploymentRepository=codeartifact::default::https://mdaca-201959883603.d.codeartifact.us-east-2.amazonaws.com/maven/OHDSI/
+          mvn deploy -s .m2/settings.xml -DaltDeploymentRepository=codeartifact::default::https://mdaca-201959883603.d.codeartifact.us-east-2.amazonaws.com/maven/OHDSI/
           pwd
+          ls -la 
           find "$TARGET_DIR" -name "*.jar" | while read -r jarfile; do
                 echo "Processing $jarfile..."
 
