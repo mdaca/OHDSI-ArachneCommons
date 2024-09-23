@@ -74,8 +74,16 @@ jobs:
             fi
             done
           mvn deploy -s .m2/settings.xml -DaltDeploymentRepository=codeartifact::default::https://mdaca-201959883603.d.codeartifact.us-east-2.amazonaws.com/maven/OHDSI/
-          pwd
-          ls -la 
+          mkdir target
+          mv /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-commons/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
+          mv /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-commons-types/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
+          mv /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-commons-utils/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
+          mv /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-no-handler-found-exception-util/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
+          mv /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-scheduler/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
+          mv /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-storage/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
+          mv /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-sys-settings/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
+          mv /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/data-source-manager/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
+          mv /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/execution-enginer-commons/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
           find "$TARGET_DIR" -name "*.jar" | while read -r jarfile; do
                 echo "Processing $jarfile..."
 
