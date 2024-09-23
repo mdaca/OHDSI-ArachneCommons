@@ -104,10 +104,10 @@ jobs:
 
                 echo "Exploded $jarfile into $exploded_dir"
           done
-          rm -f /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-commons/target/arachne-commons-3.x-MDACA-exploded/META-INF/maven/com.odysseusinc.arachne/arachne-commons/pom.xml
-          rm -f /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-commons/target/arachne-scheduler-3.x-MDACA-exploded/META-INF/maven/com.odysseusinc.arachne/arachne-scheduler/pom.xml
-          rm -f /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-commons/target/arachne-storage-3.x-MDACA-exploded/META-INF/maven/com.odysseusinc.arachne/arachne-storage/pom.xml
-          rm -f /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-commons/target/arachne-sys-settings-3.x-MDACA-exploded/META-INF/maven/com.odysseusinc.arachne/arachne-sys-settings/pom.xml
+          find "$TARGET_DIR" -name "pom.xml" | while read -r pomfile; do
+                echo "Removing all pom.xml files" 
+                rm -f $pomfile
+          done
       - name: Install Trivy
         run: |
           curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin
