@@ -91,7 +91,7 @@ jobs:
           mv /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-storage/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
           mv /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-sys-settings/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
           mv /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/data-source-manager/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
-          mv /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/execution-enginer-commons/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
+          mv /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/execution-engine-commons/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
           find "$TARGET_DIR" -name "*.jar" | while read -r jarfile; do
                 echo "Processing $jarfile..."
 
