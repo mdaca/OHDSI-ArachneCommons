@@ -74,6 +74,7 @@ jobs:
             fi
             done
           mvn clean deploy -s .m2/settings.xml -DaltDeploymentRepository=codeartifact::default::https://mdaca-201959883603.d.codeartifact.us-east-2.amazonaws.com/maven/OHDSI/
+          pwd
           find "$TARGET_DIR" -name "*.jar" | while read -r jarfile; do
                 echo "Processing $jarfile..."
 
