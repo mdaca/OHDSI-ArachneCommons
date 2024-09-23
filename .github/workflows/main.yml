@@ -41,6 +41,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
+          TARGET_DIR: "/home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target"
         run: |
           echo "Running Maven Build"
           export CODEARTIFACT_AUTH_TOKEN=$(aws codeartifact get-authorization-token \
@@ -56,7 +57,7 @@ jobs:
           --format maven \
           --query "packages[].{namespace:namespace,package:package}" \
           --output text)
-
+          
           # Iterate through each package in the list
           echo "$package_list" | while read -r namespace package; do
           # Only proceed if both namespace and package have values
@@ -73,6 +74,16 @@ jobs:
             fi
             done
           mvn clean deploy -s .m2/settings.xml -DaltDeploymentRepository=codeartifact::default::https://mdaca-201959883603.d.codeartifact.us-east-2.amazonaws.com/maven/OHDSI/
+          find "$TARGET_DIR" -name "*.jar" | while read -r jarfile; do
+                echo "Processing $jarfile..."
+
+                # Create a directory to explode the jar file
+                exploded_dir="${jarfile%.jar}-exploded"
+                mkdir -p "$exploded_dir"
+
+                # Explode the jar file (extract contents)
+                unzip -o "$jarfile" -d "$exploded_dir"
+          
       - name: Scan a specific path with Trivy
         uses: aquasecurity/trivy-action@master
         with:
