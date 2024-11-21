@@ -28,7 +28,6 @@ jobs:
             --query authorizationToken \
             --output text)
       
-
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
@@ -41,6 +40,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
+          TARGET_DIR: "/home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target"
         run: |
           echo "Running Maven Build"
           export CODEARTIFACT_AUTH_TOKEN=$(aws codeartifact get-authorization-token \
@@ -56,7 +56,7 @@ jobs:
           --format maven \
           --query "packages[].{namespace:namespace,package:package}" \
           --output text)
-
+          
           # Iterate through each package in the list
           echo "$package_list" | while read -r namespace package; do
           # Only proceed if both namespace and package have values
@@ -72,10 +72,55 @@ jobs:
             echo "Skipping invalid entry: namespace=$namespace, package=$package"
             fi
             done
-          mvn clean deploy -s .m2/settings.xml -DaltDeploymentRepository=codeartifact::default::https://mdaca-201959883603.d.codeartifact.us-east-2.amazonaws.com/maven/OHDSI/
-      - name: Scan a specific path with Trivy
-        uses: aquasecurity/trivy-action@master
+          mvn deploy -s .m2/settings.xml -DaltDeploymentRepository=codeartifact::default::https://mdaca-201959883603.d.codeartifact.us-east-2.amazonaws.com/maven/OHDSI/
+          mkdir target
+          ls -la /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-commons/
+          ls -la /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-common-types/
+          ls -la /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-common-utils/target/
+          ls -la /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-no-handler-found-exception-util/
+          ls -la /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-scheduler/
+          ls -la /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-storage/
+          ls -la /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-sys-settings/
+          ls -la /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/data-source-manager/
+          ls -la /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/execution-engine-commons/
+          mv /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-commons/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
+          mv /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-common-types/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
+          mv /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-common-utils/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
+          mv /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-no-handler-found-exception-util/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
+          mv /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-scheduler/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
+          mv /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-storage/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
+          mv /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-sys-settings/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
+          mv /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/data-source-manager/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
+          mv /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/execution-engine-commons/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
+          find "$TARGET_DIR" -name "*.jar" | while read -r jarfile; do
+                echo "Processing $jarfile..."
+
+                # Create a directory to explode the jar file
+                exploded_dir="${jarfile%.jar}-exploded"
+                mkdir -p "$exploded_dir"
+
+                # Explode the jar file (extract contents)
+                unzip -o "$jarfile" -d "$exploded_dir"
+
+                echo "Exploded $jarfile into $exploded_dir"
+          done
+          find "$TARGET_DIR" -name "pom.xml" | while read -r pomfile; do
+                echo "Removing all pom.xml files" 
+                rm -f $pomfile
+          done
+      - name: Install Trivy
+        run: |
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin
+          
+      - name: Scan FS with Trivy
+        run: |
+          trivy fs --severity HIGH,CRITICAL /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
+          trivy fs --format json /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target > OHDSI-Arachne.json
+          jq -r '.Results[] | select(.Vulnerabilities != null) | .Vulnerabilities[] | [.SeveritySource, .VulnerabilityID, .PkgName, .PkgPath, .InstalledVersion, .FixedVersion, .Status, .Severity] | @csv' OHDSI-Arachne.json > OHDSI-Arachne-Trivy.csv
+
+      - name: Upload Reports
+        uses: actions/upload-artifact@v4
         with:
-          scan-type: 'fs'
-          path: '/home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target'  # Replace with the actual path you want to scan
-          severity: 'CRITICAL,HIGH'
+          name: trivy-reports
+          path: |
+            OHDSI-Arachne-Trivy.csv
