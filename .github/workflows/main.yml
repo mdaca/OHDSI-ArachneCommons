@@ -72,7 +72,7 @@ jobs:
             echo "Skipping invalid entry: namespace=$namespace, package=$package"
             fi
             done
-          mvn deploy -s .m2/settings.xml -DaltDeploymentRepository=codeartifact::default::https://mdaca-201959883603.d.codeartifact.us-east-2.amazonaws.com/maven/OHDSI/ | tee build.log
+          mvn deploy -s .m2/settings.xml -DaltDeploymentRepository=codeartifact::default::https://mdaca-201959883603.d.codeartifact.us-east-2.amazonaws.com/maven/OHDSI/ 2>&1 | tee build.log
           ls -la build.log
           ls -la /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-commons/
           ls -la /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-common-types/
@@ -95,12 +95,8 @@ jobs:
       - name: Extract JAR URLs and download to trivy_scan
         run: |
            mkdir -p trivy_scan
-           grep "Uploaded to codeartifact:" build.log | grep '.jar' | grep -v 'Progress'
-           grep "Uploaded to codeartifact:" build.log | grep '.jar' | grep -v 'Progress' | awk '{print $4}'
-           grep "Uploaded to codeartifact:" build.log | grep '.jar' | grep -v 'Progress' | awk '{print $4}' | while read url; do
-           echo "Downloading: $url"
-           curl -sSL -o "trivy_scan/$(basename "$url")" "$url"
-           done
+           grep "Uploaded to codeartifact:" build.log
+           grep "Uploaded to codeartifact:" build.log | grep '.jar' | awk '{print $4}'
       - name: Install Trivy
         run: |
           curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin
