@@ -92,32 +92,15 @@ jobs:
           cp /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-sys-settings/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
           cp /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/data-source-manager/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
           cp /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/execution-engine-commons/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
-          find "$TARGET_DIR" -name "*.jar" | while read -r jarfile; do
-                echo "Processing $jarfile..."
-
-                # Create a directory to explode the jar file
-                exploded_dir="${jarfile%.jar}-exploded"
-                mkdir -p "$exploded_dir"
-
-                # Explode the jar file (extract contents)
-                unzip -o "$jarfile" -d "$exploded_dir"
-
-                echo "Exploded $jarfile into $exploded_dir"
-          done
-          find "$TARGET_DIR" -name "pom.xml" | while read -r pomfile; do
-                echo "Removing all pom.xml files" 
-                rm -f $pomfile
-          done
       - name: Install Trivy
         run: |
           curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin
           
       - name: Scan FS with Trivy
         run: |
-          trivy fs --file-pattern "**/*.jar" --debug /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons
-          trivy fs --file-pattern "**/*.jar" --severity HIGH,CRITICAL /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons
-          trivy fs --file-pattern "**/*.jar" --format json /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons > OHDSI-Arachne.json
-          jq -r '.Results[] | select(.Vulnerabilities != null) | .Vulnerabilities[] | [.SeveritySource, .VulnerabilityID, .PkgName, .PkgPath, .InstalledVersion, .FixedVersion, .Status, .Severity] | @csv' OHDSI-Arachne.json > OHDSI-Arachne-Trivy.csv
+            trivy fs --severity HIGH,CRITICAL --debug /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
+            trivy fs --format json --debug /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target > OHDSI-Arachne.json
+            jq -r '.Results[] | select(.Vulnerabilities != null) | .Vulnerabilities[] | [.SeveritySource, .VulnerabilityID, .PkgName, .PkgPath, .InstalledVersion, .FixedVersion, .Status, .Severity] | @csv' OHDSI-Arachne.json > OHDSI-Arachne-Trivy.csv
 
       - name: Upload Reports
         uses: actions/upload-artifact@v4
