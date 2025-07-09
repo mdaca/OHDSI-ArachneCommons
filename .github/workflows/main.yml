@@ -98,12 +98,8 @@ jobs:
            # Remove all 'Progress' lines
            sed '/Progress/d' build.log > build_clean.log
            # Extract just the JAR URLs from lines containing 'Uploaded to codeartifact:'
-           grep "Uploaded to" build_clean.log
-           grep "Uploaded to" build_clean.log | grep '/.jar' | awk '{print $4}'
-           grep "Uploaded to" build_clean.log | grep '/.jar' | awk '{print $4}' | while read -r url; do
-             echo "Downloading: $url"
-             curl -fSL -o "trivy_scan/$(basename "$url")" "$url" && echo "Saved to trivy_scan/" || echo "Failed to download: $url"
-           done
+           cat build_clean.log | grep "Uploaded"
+           cat build_clean.log | grep ".jar"
       - name: Install Trivy
         run: |
           curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin
