@@ -96,25 +96,12 @@ jobs:
         run: |
            mkdir -p trivy_scan
            # Remove all 'Progress' lines
-           sed '/Progress/d' build.log > build_clean.log
-           # Extract just the JAR URLs from lines containing 'Uploaded to codeartifact:'
-           cat build_clean.log | grep "Uploaded"
-           cat build_clean.log | grep ".jar"
-      - name: Install Trivy
-        run: |
-          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin
-          
-      - name: Scan FS with Trivy
-        run: |
-            trivy fs --severity HIGH,CRITICAL --debug trivy_scan
-            trivy fs --format json --debug trivy_scan > OHDSI-Arachne.json
-            jq -r '.Results[] | select(.Vulnerabilities != null) | .Vulnerabilities[] | [.SeveritySource, .VulnerabilityID, .PkgName, .PkgPath, .InstalledVersion, .FixedVersion, .Status, .Severity] | @csv' OHDSI-Arachne.json > OHDSI-Arachne-Trivy.csv
-
+           cat build.log | sed '/Progress/d' > build_clean.log
+      
       - name: Upload Reports
         uses: actions/upload-artifact@v4
         with:
           name: trivy-reports
           path: |
-            OHDSI-Arachne-Trivy.csv
             build.log
             build_clean.log
