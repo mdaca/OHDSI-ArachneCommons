@@ -96,8 +96,8 @@ jobs:
         run: |
            mkdir -p trivy_scan
            grep "Uploaded to" build.log | grep '\.jar'
-           grep "Uploaded to" build.log | grep '\.jar' | awk '{print $3}
-           grep "Uploaded to" build.log | grep '\.jar' | awk '{print $3} | while read url; do
+           grep "Uploaded to" build.log | grep '\.jar' | awk '{print $3}'
+           grep "Uploaded to" build.log | grep '\.jar' | awk '{print $3}' | while read url; do
            echo "Downloading: $url"
            curl -sSL -o "trivy_scan/$(basename "$url")" "$url"
            done
