@@ -72,8 +72,8 @@ jobs:
             echo "Skipping invalid entry: namespace=$namespace, package=$package"
             fi
             done
-          mvn deploy -s .m2/settings.xml -DaltDeploymentRepository=codeartifact::default::https://mdaca-201959883603.d.codeartifact.us-east-2.amazonaws.com/maven/OHDSI/
-          mkdir target
+          mvn deploy -s .m2/settings.xml -DaltDeploymentRepository=codeartifact::default::https://mdaca-201959883603.d.codeartifact.us-east-2.amazonaws.com/maven/OHDSI/ | tee build.log
+          ls -la build.log
           ls -la /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-commons/
           ls -la /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-common-types/
           ls -la /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-common-utils/target/
