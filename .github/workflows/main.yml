@@ -95,7 +95,7 @@ jobs:
       - name: Extract JAR URLs and download to trivy_scan
         run: |
            mkdir -p trivy_scan
-           grep "Uploaded to" build.log
+           grep "Uploaded to" build.log | grep '\.jar'
            grep "Uploaded to" build.log | grep '\.jar' | awk '{print $NF}' 
            grep "Uploaded to" build.log | grep '\.jar' | awk '{print $NF}' | while read url; do
            echo "Downloading: $url"
