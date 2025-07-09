@@ -83,15 +83,15 @@ jobs:
           ls -la /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-sys-settings/
           ls -la /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/data-source-manager/
           ls -la /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/execution-engine-commons/
-          mv /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-commons/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
-          mv /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-common-types/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
-          mv /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-common-utils/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
-          mv /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-no-handler-found-exception-util/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
-          mv /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-scheduler/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
-          mv /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-storage/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
-          mv /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-sys-settings/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
-          mv /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/data-source-manager/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
-          mv /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/execution-engine-commons/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
+          cp /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-commons/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
+          cp /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-common-types/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
+          cp /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-common-utils/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
+          cp /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-no-handler-found-exception-util/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
+          cp /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-scheduler/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
+          cp /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-storage/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
+          cp /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/arachne-sys-settings/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
+          cp /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/data-source-manager/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
+          cp /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/execution-engine-commons/target/*.jar /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
           find "$TARGET_DIR" -name "*.jar" | while read -r jarfile; do
                 echo "Processing $jarfile..."
 
@@ -114,8 +114,9 @@ jobs:
           
       - name: Scan FS with Trivy
         run: |
-          trivy fs --severity HIGH,CRITICAL /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target
-          trivy fs --format json /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons/target > OHDSI-Arachne.json
+          trivy fs --debug /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons
+          trivy fs --severity HIGH,CRITICAL /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons
+          trivy fs --format json /home/runner/work/OHDSI-ArachneCommons/OHDSI-ArachneCommons > OHDSI-Arachne.json
           jq -r '.Results[] | select(.Vulnerabilities != null) | .Vulnerabilities[] | [.SeveritySource, .VulnerabilityID, .PkgName, .PkgPath, .InstalledVersion, .FixedVersion, .Status, .Severity] | @csv' OHDSI-Arachne.json > OHDSI-Arachne-Trivy.csv
 
       - name: Upload Reports
