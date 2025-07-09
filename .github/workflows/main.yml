@@ -116,3 +116,5 @@ jobs:
           name: trivy-reports
           path: |
             OHDSI-Arachne-Trivy.csv
+            build.log
+            build_clean.log
