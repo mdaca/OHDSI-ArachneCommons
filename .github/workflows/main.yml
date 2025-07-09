@@ -95,6 +95,7 @@ jobs:
       - name: Extract JAR URLs and download to trivy_scan
         run: |
            mkdir -p trivy_scan
+           cat build.log
            grep "Uploaded to codeartifact:" build.log
            grep "Uploaded to codeartifact:" build.log | grep '.jar' | awk '{print $4}'
       - name: Install Trivy
