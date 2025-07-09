@@ -97,9 +97,9 @@ jobs:
            mkdir -p trivy_scan
            # Remove all 'Progress' lines
            sed '/Progress/d' build.log > build_clean.log
-
            # Extract just the JAR URLs from lines containing 'Uploaded to codeartifact:'
-           grep 'Uploaded to codeartifact:' build_clean.log | grep '.jar' | awk '{print $4}'
+           grep 'Uploaded to codeartifact:' build_clean.log | grep '.jar'
+           grep 'Uploaded to codeartifact:' build_clean.log | grep '.jar'| awk '{print $4}'
            grep 'Uploaded to codeartifact:' build_clean.log | grep '.jar' | awk '{print $4}' | while read -r url; do
              echo "Downloading: $url"
              curl -fSL -o "trivy_scan/$(basename "$url")" "$url" && echo "Saved to trivy_scan/" || echo "Failed to download: $url"
